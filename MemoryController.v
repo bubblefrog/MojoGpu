@@ -31,27 +31,21 @@ module MemoryController(
 	 
 	 
 	 
-	 wire[2:0] cmdW;
-	 assign cmdW = addrW[15:13];
-	 
-	 wire[2:0] cmdR;
-	 assign cmdR = addrR[15:13];
-	 
 	 wire weaChar;
 	 wire weaFont;
 	 
-	 assign weaChar = ~cmdW[0];
-	 assign weaFont = cmdW[0];
+	 assign weaChar = ~addrW[13];
+	 assign weaFont = addrW[13];
 	 
 	 wire charClock;
 	 wire fontClock;
-	 assign charClock = ~cmdR[0] & clkaR;
-	 assign fontClock = cmdR[0] & clkaR;
+	 assign charClock = ~addrR[13] && clkaR;
+	 assign fontClock =  addrR[13] && clkaR;
 	 
 	 wire [7:0]dataChar;
 	 wire [7:0]dataFont;
 	 
-	 assign dataR = cmdW[0] ? dataFont : dataChar;
+	 assign dataR = addrW[13] ? dataFont : dataChar;
 
 
 CharBuffer char (
