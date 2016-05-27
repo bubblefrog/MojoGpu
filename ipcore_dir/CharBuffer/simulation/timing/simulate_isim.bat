@@ -45,6 +45,7 @@
 :: PART OF THIS FILE AT ALL TIMES.
 ::--------------------------------------------------------------------------------
 
+cp ..\..\..\CharBuffer.mif .
 
 
 vlogcomp -work work ..\..\implement\results\routed.v

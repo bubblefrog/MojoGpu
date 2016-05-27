@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <symbol version="7" name="FontMemory">
     <symboltype>BLOCK</symboltype>
-    <timestamp>2016-5-15T15:17:43</timestamp>
+    <timestamp>2016-5-15T19:29:0</timestamp>
     <pin polarity="Input" x="0" y="80" name="addra[11:0]" />
     <pin polarity="Input" x="0" y="112" name="dina[7:0]" />
     <pin polarity="Input" x="0" y="208" name="wea[0:0]" />

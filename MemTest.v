@@ -4,7 +4,7 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   17:18:20 05/15/2016
+// Create Date:   19:28:57 05/15/2016
 // Design Name:   MemoryController
 // Module Name:   C:/MojoGpu/MemTest.v
 // Project Name:  Mojo-Base
@@ -28,20 +28,24 @@ module MemTest;
 	reg [15:0] addrW;
 	reg [7:0] dataW;
 	reg clkaW;
-	reg [15:0] addrR;
+	reg [12:0] addrRChar;
+	reg [11:0] addrRFont;
 	reg clkaR;
 
 	// Outputs
-	wire [7:0] dataR;
+	wire [7:0] dataChar;
+	wire [7:0] dataFont;
 
 	// Instantiate the Unit Under Test (UUT)
 	MemoryController uut (
 		.addrW(addrW), 
 		.dataW(dataW), 
 		.clkaW(clkaW), 
-		.addrR(addrR), 
+		.addrRChar(addrRChar), 
+		.addrRFont(addrRFont), 
 		.clkaR(clkaR), 
-		.dataR(dataR)
+		.dataChar(dataChar), 
+		.dataFont(dataFont)
 	);
 
 	initial begin
@@ -49,14 +53,17 @@ module MemTest;
 		addrW = 0;
 		dataW = 0;
 		clkaW = 0;
-		addrR = 16'b0010000000000000;
+		addrRChar = 0;
+		addrRFont = 0;
 		clkaR = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
-        clkaR=1;
-		  #10;
-		  clkaR=0;
+		
+		clkaR=1;
+		#10
+		clkaR=0;
+        
 		// Add stimulus here
 
 	end

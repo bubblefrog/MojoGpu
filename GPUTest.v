@@ -4,9 +4,9 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   12:15:00 05/15/2016
+// Create Date:   18:58:45 05/15/2016
 // Design Name:   mojo_top
-// Module Name:   C:/MojoGpu/GPuTEst.v
+// Module Name:   C:/MojoGpu/GPUTest.v
 // Project Name:  Mojo-Base
 // Target Device:  
 // Tool versions:  
@@ -22,15 +22,13 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-module GPuTEst;
+module GPUTest;
 
 	// Inputs
 	reg clk;
 	reg [15:0] addrW;
 	reg [7:0] dataW;
 	reg clkW;
-	reg [10:0] x;
-	reg [10:0] y;
 	reg vgClock;
 	reg rst_n;
 	reg cclk;
@@ -41,6 +39,11 @@ module GPuTEst;
 	reg avr_rx_busy;
 
 	// Outputs
+	wire hSync;
+	wire vSync;
+	wire r;
+	wire g;
+	wire b;
 	wire [8:0] pd;
 	wire [7:0] led;
 	wire spi_miso;
@@ -53,6 +56,11 @@ module GPuTEst;
 		.addrW(addrW), 
 		.dataW(dataW), 
 		.clkW(clkW), 
+		.hSync(hSync), 
+		.vSync(vSync), 
+		.r(r), 
+		.g(g), 
+		.b(b), 
 		.vgClock(vgClock), 
 		.pd(pd), 
 		.rst_n(rst_n), 
@@ -71,14 +79,11 @@ module GPuTEst;
 	initial begin
 		// Initialize Inputs
 		clk = 0;
-		addrW = 2;
-		dataW = 3;
+		addrW = 0;
+		dataW = 0;
 		clkW = 0;
-		x = 17;
-		y = 0;
 		vgClock = 0;
-		
-		rst_n = 1;
+		rst_n = 0;
 		cclk = 0;
 		spi_ss = 0;
 		spi_mosi = 0;
@@ -88,29 +93,73 @@ module GPuTEst;
 
 		// Wait 100 ns for global reset to finish
 		#100;
-		rst_n=0;
-		clkW =1;
-		#10;
-		rst_n =1;
-		clkW=1;
-		#10;
-		clkW=0;
-		#10;
+		
 		clk=1;
 		#10;
 		clk=0;
-				#10;
-		clk=1;
+		#10;
+		
+				clk=1;
 		#10;
 		clk=0;
-				#10;
-		clk=1;
+		#10;
+		
+				clk=1;
 		#10;
 		clk=0;
-				#10;
-		clk=1;
+		#10;
+		
+				clk=1;
 		#10;
 		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
+		
+				clk=1;
+		#10;
+		clk=0;
+		#10;
         
 		// Add stimulus here
 

@@ -19,17 +19,37 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module MemoryController(
-    input [15:0] addrW,
-    input [7:0] dataW,
-    input clkaW,
+
+	 input DATALINE,
+    input CLOCK,
+    input SS,
+	
+	 input clk,
 	 
-	 input [15:0] addrR,
+	 input [12:0] addrRChar,
+	 input [11:0] addrRFont,
 	 input clkaR,
-	 output [7:0] dataR
+	 
+	 output [7:0] dataChar,
+	 output [7:0] dataFont,
+	 output [7:0] led
 	 
     );
 	 
 	 
+	 reg [31:0] dataIn=0;
+	 wire [15:0] addrW;
+	 assign addrW = dataIn [15:0];
+	 wire [7:0] dataW;
+	 assign dataW = dataIn [24:16];
+	 
+	 always@(posedge CLOCK) begin
+		//if (~SS) begin //SCK is rising and SS is low
+			dataIn <= {dataIn [30:0], DATALINE}; // Shift in  data
+		//end
+	 end
+	
+	 assign led = dataW;
 	 
 	 wire weaChar;
 	 wire weaFont;
@@ -37,34 +57,24 @@ module MemoryController(
 	 assign weaChar = ~addrW[13];
 	 assign weaFont = addrW[13];
 	 
-	 wire charClock;
-	 wire fontClock;
-	 assign charClock = ~addrR[13] && clkaR;
-	 assign fontClock =  addrR[13] && clkaR;
-	 
-	 wire [7:0]dataChar;
-	 wire [7:0]dataFont;
-	 
-	 assign dataR = addrW[13] ? dataFont : dataChar;
-
 
 CharBuffer char (
-  .clka(clkaW), // input clka
+  .clka(SS), // input clka
   .wea(weaChar), // input [0 : 0] wea
   .addra(addrW[12:0]), // input [12 : 0] addra
   .dina(dataW), // input [7 : 0] dina
-  .clkb(charClock), // input clkb
-  .addrb(addrR[12 : 0]), // input [12 : 0] addrb
+  .clkb(clkaR), // input clkb
+  .addrb(addrRChar), // input [12 : 0] addrb
   .doutb(dataChar) // output [7 : 0] doutb
 );
 
 FontMemory font (
-  .clka(clkaW), // input clka
+  .clka(SS), // input clka
   .wea(weaFont), // input [0 : 0] wea
   .addra(addrW[11:0]), // input [11 : 0] addra
   .dina(dataW), // input [7 : 0] dina
-  .clkb(fontClock), // input clkb
-  .addrb(addrR[11 : 0]), // input [11 : 0] addrb
+  .clkb(clkaR), // input clkb
+  .addrb(addrRFont), // input [11 : 0] addrb
   .doutb(dataFont) // output [7 : 0] doutb
 );
 

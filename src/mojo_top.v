@@ -1,6 +1,10 @@
 module mojo_top(
     // 50MHz clock input
     input clk,
+	 input SPICLOCK,
+	 input DATALINE,
+	 input SS,
+
 	 
 	 input [15:0]addrW,
 	 input [7:0]dataW,
@@ -12,8 +16,6 @@ module mojo_top(
 	 output r,
 	 output g,
 	 output b,
-	 input vgClock,
-	 output [8:0] pd,
     // Input from reset button (active low)
     input rst_n,
     // cclk input from AVR, high when AVR is ready
@@ -39,48 +41,64 @@ wire rst = ~rst_n; // make reset active high
 assign spi_miso = 1'bz;
 assign avr_rx = 1'bz;
 assign spi_channel = 4'bzzzz;
-
-assign led = clk;
-
-wire[10:0]x;
-wire[10:0]y;
+wire[9:0]x;
+wire[9:0]y;
 
 wire [7:0]data;
 wire [15:0] addr;
-
-assign r = pd[0];
-assign g = pd[3];
-assign b = pd[6];
+wire [8:0] pd;
+assign r = pd[0] & onScreen;
+assign g = pd[3] & onScreen;
+assign b = pd[6] & onScreen;
 
 wire rClock;
 
 wire cdClock;
+
+wire onScreen;
+
+wire vgClock;
+
+
+
+wire [11:0] fontAddr;
+wire [12:0] charAddr;
+wire [7:0] fontData;
+wire [7:0] charData;
 vgaSync vga (
     .clk(clk), 
     .row(y), 
     .column(x), 
     .hSync(hSync), 
     .vSync(vSync), 
-    .onScreen(onScreen)
+    .onScreen(onScreen),
+	 .vgClock(vgClock)
     );
-	 // Instantiate the module
-MemoryController mem (
-    .addrW(addrW), 
-    .dataW(dataW), 
-    .clkaW(clkW), 
-    .addrR(addr), 
-    .clkaR(rClock), 
-    .dataR(data)
-    );
-// Instantiate the module
+
+
+
 ConsoleDriver cd (
-    .data(data), 
     .x(x), 
     .y(y), 
-    .vgaClock(cdClock), 
-    .memAddr(addr), 
+    .vgaClock(vgClock), 
     .readClock(rClock), 
-    .pixelData(pd)
+    .pixelData(pd), 
+    .addrRChar(charAddr), 
+    .addrRFont(fontAddr), 
+    .dataChar(charData), 
+    .dataFont(fontData)
+    );
+
+MemoryController mem (
+.DATALINE(DATALINE), 
+    .CLOCK(SPICLOCK), 
+    .SS(SS),  
+    .addrRChar(charAddr), 
+    .addrRFont(fontAddr), 
+    .clkaR(rClock), 
+    .dataChar(charData), 
+    .dataFont(fontData),
+	 .led(led)
     );
 
 

@@ -1,6 +1,7 @@
 # Output products list for <CharBuffer>
 CharBuffer.asy
 CharBuffer.gise
+CharBuffer.mif
 CharBuffer.ngc
 CharBuffer.sym
 CharBuffer.v

@@ -1,6 +1,7 @@
 # Output products list for <FontMemory>
 FontMemory.asy
 FontMemory.gise
+FontMemory.mif
 FontMemory.ngc
 FontMemory.sym
 FontMemory.v
